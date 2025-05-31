@@ -1,26 +1,43 @@
 import sys
+import os
+
+
+def exit(*args):
+    status = int(args[0])
+    os._exit(status)
+
+
+def echo(*args):
+    echo_str = " ".join(args)
+    print(echo_str)
+    return
+
+
+def type(*args):
+    command = args[0]
+    if command in built_in_commands:
+        print(f"{command} is a shell builtin")
+    return
+
+
+built_in_commands = {"exit": exit, "echo": echo, "type": type}
 
 
 def main():
 
-    # Wait for user input
     while True:
         sys.stdout.write("$ ")
 
-        command = input()
+        command_input = input()
 
-        if command.startswith("exit") and command.endswith("0"):
-            sys.exit(0)
-
-        if command.startswith("echo"):
-            output = command.split(" ", 1)
-            if len(output) > 1:
-                _, echoing = output
-                print(echoing)
-            else:
-                print("")
-        else:
+        command, *args = command_input.split()
+        if command not in built_in_commands:
             print(f"{command}: command not found")
+            return
+
+        script = built_in_commands[command]
+
+        script(*args)
 
 
 if __name__ == "__main__":
