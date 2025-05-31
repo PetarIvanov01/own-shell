@@ -18,11 +18,13 @@ def type(*args):
     if command in built_in_commands:
         print(f"{command} is a shell builtin")
     else:
-        command_not_found(command)
+        print(f"{command}: not found")
+
+    return
 
 
 def command_not_found(command):
-    print(f"{command}: not found")
+    print(f"{command}: command not found")
     return
 
 
@@ -43,6 +45,7 @@ def main():
         script = built_in_commands[command]
 
         script(*args)
+        return
 
 
 if __name__ == "__main__":
