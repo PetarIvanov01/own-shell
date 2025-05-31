@@ -9,7 +9,6 @@ def exit(*args):
 def echo(*args):
     echo_str = " ".join(args)
     print(echo_str)
-    return
 
 
 def type(*args):
@@ -18,8 +17,6 @@ def type(*args):
         print(f"{command} is a shell builtin")
     else:
         print(f"{command}: not found")
-
-    return
 
 
 def command_not_found(command):
@@ -41,10 +38,9 @@ def main():
         if command not in built_in_commands:
             command_not_found(command)
 
-        script = built_in_commands[command]
-
-        script(*args)
-        return
+        else:
+            script = built_in_commands[command]
+            script(*args)
 
 
 if __name__ == "__main__":
