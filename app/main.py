@@ -15,7 +15,8 @@ def main():
         if command.startswith("echo"):
             output = command.split(" ", 1)
             if len(output) > 1:
-                print(output)
+                _, echoing = output
+                print(echoing)
             else:
                 print("")
         else:
