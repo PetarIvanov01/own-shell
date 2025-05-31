@@ -20,6 +20,8 @@ def type(*args):
         print(f"{command} is a shell builtin")
     elif path := shutil.which(command):
         print(f"{command} is {path}")
+    elif path := shutil.which(command, os.X_OK):
+        print(path)
     else:
         print(f"{command}: not found")
 
