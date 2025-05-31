@@ -22,7 +22,7 @@ def type(*args):
 
 
 def command_not_found(command):
-    print(f"{command}: command not found")
+    print(f"{command}: not found")
     return
 
 
