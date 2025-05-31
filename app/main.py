@@ -1,10 +1,9 @@
 import sys
-import os
 
 
 def exit(*args):
     status = int(args[0])
-    os._exit(status)
+    sys.exit(status)
 
 
 def echo(*args):
