@@ -4,6 +4,7 @@ import shutil
 import subprocess
 
 PATH = os.environ["PATH"]
+HOME = os.environ["HOME"]
 
 
 def exit(*args):
@@ -12,6 +13,11 @@ def exit(*args):
 
 
 def echo(*args):
+    print(args)
+    start = args[0]
+    end = args[len(args) - 1]
+    if start == "'" and end == "'":
+        print()
     echo_str = " ".join(args)
     print(echo_str)
 
@@ -50,7 +56,39 @@ def pwd():
     print(os.getcwd())
 
 
-built_in_commands = {"exit": exit, "echo": echo, "type": type, "pwd": pwd}
+def cd(*args):
+    path_to_cd: str = args[0]
+    try:
+        cur_path = os.getcwd()
+        if path_to_cd.startswith("~"):
+            os.chdir(HOME)
+        elif path_to_cd.startswith("./"):
+            next_dirs = path_to_cd.split("./")
+            for next in next_dirs:
+                cur_path = cur_path + f"/{next}"
+            os.chdir(cur_path)
+        elif path_to_cd.startswith("../"):
+            prev_dirs = path_to_cd.split("/")
+            for prev in prev_dirs:
+                if prev == "..":
+                    index = cur_path.rindex("/")
+                    cur_path = cur_path[0:index]
+                else:
+                    cur_path = cur_path + f"/{prev}"
+            os.chdir(cur_path)
+        else:
+            os.chdir(path_to_cd)
+    except:
+        print(f"cd: {path_to_cd}: No such file or directory")
+
+
+built_in_commands = {
+    "exit": {"hasArgs": True, "command": exit},
+    "echo": {"hasArgs": True, "command": echo},
+    "type": {"hasArgs": True, "command": type},
+    "pwd": {"hasArgs": False, "command": pwd},
+    "cd": {"hasArgs": True, "command": cd},
+}
 
 
 def main():
@@ -64,8 +102,16 @@ def main():
             else:
                 command_not_found(command)
         else:
-            script = built_in_commands[command]
-            script(*args)
+
+            hasArgs, command = built_in_commands[command].values()
+            if hasArgs:
+                if len(args):
+                    command(*args)
+                else:
+                    print(f"no args provided to {command}")
+
+            else:
+                command()
 
 
 if __name__ == "__main__":
