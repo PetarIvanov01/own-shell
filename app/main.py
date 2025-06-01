@@ -3,7 +3,7 @@ import os
 import shutil
 import subprocess
 
-path = os.environ["PATH"]
+PATH = os.environ["PATH"]
 
 
 def exit(*args):
@@ -33,7 +33,7 @@ def command_not_found(command):
 
 
 def findExe(exe):
-    paths = path.split(":")
+    paths = PATH.split(":")
 
     for pathDir in paths:
         try:
@@ -46,7 +46,11 @@ def findExe(exe):
             pass
 
 
-built_in_commands = {"exit": exit, "echo": echo, "type": type}
+def pwd():
+    print(os.getcwd())
+
+
+built_in_commands = {"exit": exit, "echo": echo, "type": type, "pwd": pwd}
 
 
 def main():
@@ -60,9 +64,8 @@ def main():
             else:
                 command_not_found(command)
         else:
-            if len(args) != 0:
-                script = built_in_commands[command]
-                script(*args)
+            script = built_in_commands[command]
+            script(*args)
 
 
 if __name__ == "__main__":
